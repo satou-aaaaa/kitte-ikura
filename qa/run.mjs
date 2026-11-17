@@ -546,7 +546,7 @@ try {
   check("2段目「どの種類の郵便？」：どの種類の問題も答えは4つの種類のどれか・選び肢は定形・規格内・規格外・はがきの4つ", bad.length === 0 && Object.keys(G.GROUPS).join() === "teikei,nai,gai,hagaki", bad.join(",")); }
 // 引き継ぎコード（shared-workflows template/qa/transfer-check.mjs）
 try {
-  const sample = { "kit-v1": JSON.stringify({ v: 1, tut: true, days: { "2026-11-13": { m: [0, 1, 0, 0, 2], k: ["e", "mitame", "halo", "kori", "kawa"] } }, hdays: {}, adays: {}, dex: { teikei: 1, hagaki: 1, nai: 1, gai: 1, kurabe: 1 }, runs: {}, kofi: {}, ach: {}, ebest: 7, t: 1 }), "kit-fs": "3" };
+  const sample = { "kit-v1": JSON.stringify({ v: 1, tut: true, days: { "2026-11-13": { m: [0, 1, 0, 0, 2], k: ["e", "mitame", "halo", "kori", "kawa"] } }, hdays: {}, adays: {}, dex: { teikei: 1, hagaki: 1, nai: 1, gai: 1, kurabe: 1 }, runs: {}, kofi: {}, ach: {}, ebest: 7, t: 1 }), "kit-fs": "3", "kit-depth": JSON.stringify({ rv: { "teikei|g1": { s: 1, due: "2026-11-20", t: 1 } } }) }; // 復習の記録も運ぶ（2026-11-17 CodeRabbit）
   await checkTransfer({ browser, url, game: "kitte-ikura", sample, check, open: async (pg) => { if (await pg.locator("#howto[open]").count()) await pg.click("#howto-ok"); } });
 } catch (e) { check("引き継ぎの検査が最後まで動く", false, e.message.split("\n")[0]); }
 await browser.close();

@@ -78,20 +78,20 @@
     // 定形の封筒
     teikei(R) {
       const [L, W, T] = teikeiSize(R), g = ri(R, 4, 50), m = ri(R, 0, MEDIA.length - 1);
-      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒の手紙。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(110), yens([85, 140, 180]), 3), ans: yen(110), grp: "teikei", v: `${L}:${W}:${T}:${g}:${m}`,
-        why: `長さ14〜23.5cm・幅9〜12cm・厚さ1cm・50gまでに入るので定形。定形は110円です。` };
+      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒の手紙。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(TEIKEI), yens([HAGAKI, priceOf("nai", 50), priceOf("nai", 100)]), 3), ans: yen(TEIKEI), grp: "teikei", v: `${L}:${W}:${T}:${g}:${m}`,
+        why: `長さ14〜23.5cm・幅9〜12cm・厚さ1cm・50gまでに入るので定形。定形は${TEIKEI}円です。` };
     },
     // はがき
     hagaki(R) {
       const m = ri(R, 0, 5), who = ["おばあちゃん", "先生", "友だち", "いとこ", "お世話になった人", "家族"][m];
-      return { media: "はがき", q: `${who}に、はがきを1枚出す。切手（料金）はいくら？`, opts: optsOf(R, yen(85), yens([110, 63, 140]), 3), ans: yen(85), grp: "hagaki", v: `${m}`,
-        why: "通常はがきは85円です（決まった大きさをこえると手紙のあつかい）。" };
+      return { media: "はがき", q: `${who}に、はがきを1枚出す。切手（料金）はいくら？`, opts: optsOf(R, yen(HAGAKI), yens([TEIKEI, 63, priceOf("nai", 50)]), 3), ans: yen(HAGAKI), grp: "hagaki", v: `${m}`,
+        why: `通常はがきは${HAGAKI}円です（決まった大きさをこえると手紙のあつかい）。` };
     },
     // 定形を何通か
     nantsu(R) {
-      const [L, W, T] = teikeiSize(R), g = ri(R, 5, 40), n = ri(R, 2, 5), m = ri(R, 0, MEDIA.length - 1), a = 110 * n;
-      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒の手紙を${n}通出す。切手代は合わせていくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(a), yens([85 * n, 140 * n, a + 110, a - 110]), 3), ans: yen(a), grp: "teikei", v: `${L}:${W}:${T}:${g}:${n}:${m}`,
-        why: `定形は1通110円。110×${n}＝${fmt(a)}円です。` };
+      const [L, W, T] = teikeiSize(R), g = ri(R, 5, 40), n = ri(R, 2, 5), m = ri(R, 0, MEDIA.length - 1), a = TEIKEI * n;
+      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒の手紙を${n}通出す。切手代は合わせていくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(a), yens([HAGAKI * n, priceOf("nai", 50) * n, a + TEIKEI, a - TEIKEI]), 3), ans: yen(a), grp: "teikei", v: `${L}:${W}:${T}:${g}:${n}:${m}`,
+        why: `定形は1通${TEIKEI}円。${TEIKEI}×${n}＝${fmt(a)}円です。` };
     },
     // 定形外（規格内）
     nai(R) {
@@ -108,20 +108,20 @@
     // 定形の大きさでも、厚いと定形外
     atsui(R) {
       const [L, W] = teikeiSize(R), T = pick(R, [1.2, 1.5, 2, 2.5, 3]), g = ri(R, 20, 50), m = ri(R, 0, MEDIA.length - 1);
-      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒（小さな品物を入れた）。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(140), yens([110, 180, 260, 220]), 4), ans: yen(140), grp: "nai", v: `${L}:${W}:${T}:${g}:${m}`,
+      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒（小さな品物を入れた）。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(priceOf("nai", g)), yens([TEIKEI, priceOf("nai", 100), 260, 220]), 4), ans: yen(priceOf("nai", g)), grp: "nai", v: `${L}:${W}:${T}:${g}:${m}`,
         why: `定形は厚さ1cmまで。${cm(T)}cmなので定形外（規格内）で、${feeWhy("nai", g)}です。` };
     },
     // 往復はがき
     ofuku(R) {
       const m = ri(R, 0, 5), what = ["同窓会の出欠を聞く", "集まりの出欠を聞く", "返事をもらいたい", "申しこみの返事をもらう", "クラス会の出欠を聞く", "行事の出欠を聞く"][m];
-      return { media: "はがき", q: `${what}ために、往復はがきを1組出す。料金はいくら？`, opts: optsOf(R, yen(170), yens([85, 110, 220, 140]), 4), ans: yen(170), grp: "hagaki", v: `${m}`,
-        why: "往復はがきは1組170円です（行きと帰りの2枚分）。" };
+      return { media: "はがき", q: `${what}ために、往復はがきを1組出す。料金はいくら？`, opts: optsOf(R, yen(OFUKU), yens([HAGAKI, TEIKEI, 220, priceOf("nai", 50)]), 4), ans: yen(OFUKU), grp: "hagaki", v: `${m}`,
+        why: `往復はがきは1組${OFUKU}円です（行きと帰りの2枚分）。` };
     },
     // 定形＋速達
     sokutatsu(R) {
       const [L, W, T] = teikeiSize(R), g = ri(R, 5, 50), m = ri(R, 0, MEDIA.length - 1);
-      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒を、急ぐので速達で出す。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(410), yens([110, 300, 440, 510]), 4), ans: yen(410), grp: "teikei", v: `${L}:${W}:${T}:${g}:${m}`,
-        why: "定形110円に、速達（250gまで）の300円を足して410円です。" };
+      return { media: MEDIA[m], q: `${sizeText(L, W, T, g)}の封筒を、急ぐので速達で出す。切手はいくら？`, svg: svgOf(L, W, T, g), opts: optsOf(R, yen(TEIKEI + sokuOf(g)), yens([TEIKEI, sokuOf(g), 440, 510]), 4), ans: yen(TEIKEI + sokuOf(g)), grp: "teikei", v: `${L}:${W}:${T}:${g}:${m}`,
+        why: `定形${TEIKEI}円に、速達（250gまで）の${sokuOf(g)}円を足して${fmt(TEIKEI + sokuOf(g))}円です。` };
     },
     // 定形外（規格外）
     gai(R) {

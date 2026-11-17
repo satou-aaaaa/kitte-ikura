@@ -539,10 +539,15 @@ const bookOf = (s, m) => (m === "d" ? s.days : m === "h" ? s.hdays : m === "a" ?
 // 終わった回を日ごとの記録に入れる（結果を見る前に閉じても、別のタブが次の日を保存しても、終えた日を失わない）
 function bank(s, r) { const b = doneOf(r) ? bookOf(s, r.mode) : null; if (!b || b[r.date] || (r.mode === "a" && s.days[r.date])) return false; b[r.date] = recOf(r); return true; }
 // 保存に失敗したあとはメモリと保存の両方を読む。合わせる前に両方を fresh() で補う。数は高いほう、途中経過は同じ回なら進んだほう
+function join(w, o) {
+  const a = w.cur, b = o.cur, u = (x, y) => [...new Set([...(x || []), ...(y || [])])];
+  if (!a || !b || w.res.length !== o.res.length || a.i !== b.i || a.tag !== b.tag) return w;
+  return { ...w, cur: { ...a, wrong: u(a.wrong, b.wrong), w2: u(a.w2, b.w2), hints: Math.max(a.hints || 0, b.hints || 0), step: Math.max(a.step || 1, b.step || 1), h2: a.h2 || b.h2 ? 1 : 0, jd: a.jd || b.jd || null } };
+}
 function load() {
   // 2つの写し（localStorage と保存に失敗したときの mem）の合わせ方は共通部品 GameStore（上の store:begin〜end）。
   // 直すときは shared-workflows の template/store/store.js を直して配る（ここに合わせ方を書き戻さない）
-  return GameStore.load(KEY, mem, { v: 1, fresh, tidy, bank, doneOf, bookOf, objs: ["days", "hdays", "adays", "dex", "runs", "kofi", "ach"] });
+  return GameStore.load(KEY, mem, { v: 1, fresh, tidy, bank, doneOf, bookOf, objs: ["days", "hdays", "adays", "dex", "runs", "kofi", "ach"], join }); // join：同じ問いなら、まちがい・ヒント・2段目の印を両方から合わせる（2026-11-17 CodeRabbit）
 }
 // 引き継ぎコードなどから入った値を正しい形に直す（数の所に文字が入っていても画面に出さない）
 const num = (v) => (Number.isFinite(+v) && +v >= 0 ? Math.floor(+v) : 0);

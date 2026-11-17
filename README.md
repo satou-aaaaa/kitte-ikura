@@ -10,6 +10,6 @@
   - [オプションサービスの料金](https://www.post.japanpost.jp/send/fee/kokunai/option.html)
   - [はがき](https://www.post.japanpost.jp/service/send/domestic/mail/postcard/index.html)
 - 郵便物の大きさ・重さは練習用の作り話です。公式の情報の代わりではありません。料金は変わることがあるので、出す前に日本郵便の料金表で確かめてください。
-- 記録は遊ぶ人のブラウザ（localStorage）にだけ残ります。外へ通信しません。好きなだけ遊べます（回数制限なし）。
+- 記録は遊ぶ人のブラウザ（localStorage）にだけ残ります。記録を外へ送ることはありません（外から読むのは、見やすさの設定で選んだときの Google Fonts の文字だけ）。好きなだけ遊べます（回数制限なし）。
 
 作り方・決まりは [AGENTS.md](AGENTS.md)。
